@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SimplePuttyImporter.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -27,6 +28,11 @@ namespace SimplePuttyImporter
         private void BtnClose_Clicked(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void btnExport_Clicked(object sender, RoutedEventArgs e)
+        {
+            PuttyRegistry.ExportSettings(SettingsBox.SelectedItem.ToString());
         }
     }
 }

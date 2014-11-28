@@ -20,7 +20,21 @@ namespace SimplePuttyImporter.Core
                 settingsList.Add(value);
             }
 
+            rk.Close();
+
             return settingsList;
+        }
+
+        public static bool ExportSettings(String subkey)
+        {
+            string keyName = @"Software\SimonTatham\PuTTY\Sessions\"+subkey;
+            RegistryKey rk = Registry.CurrentUser.OpenSubKey(keyName);
+
+            bool exportResult = SettingsXML.CreateXML(rk, subkey);
+
+            rk.Close();
+
+            return exportResult;
         }
     }
 }
