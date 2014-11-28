@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SimplePuttyImporter.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -33,7 +34,8 @@ namespace SimplePuttyImporter
         private void MnExport_Clicked(object sender, RoutedEventArgs e)
         {
             ExportWindow expWindow = new ExportWindow();
-            expWindow.Show();
+            expWindow.SettingsBox.ItemsSource = PuttyRegistry.GetSettings();
+            expWindow.Show();   
         }
 
 
