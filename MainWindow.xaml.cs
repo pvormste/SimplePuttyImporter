@@ -35,6 +35,7 @@ namespace SimplePuttyImporter
         {
             ExportWindow expWindow = new ExportWindow();
             expWindow.SettingsBox.ItemsSource = PuttyRegistry.GetSettings();
+            expWindow.FingerprintBox.ItemsSource = PuttyRegistry.GetFingerprints();
             expWindow.Show();   
         }
 

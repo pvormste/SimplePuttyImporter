@@ -11,7 +11,7 @@ namespace SimplePuttyImporter.Core
 {
     class SettingsXML
     {
-        public static bool CreateXML(RegistryKey rk, string settingsName)
+        public static bool CreateXML(RegistryKey rk, string settingsName, bool withFingerprint, string fingerprintName)
         {
             XmlWriterSettings xmlSettings = new XmlWriterSettings();
             xmlSettings.Indent = true;
@@ -21,6 +21,7 @@ namespace SimplePuttyImporter.Core
             {
                 XmlWriter xmlWriter = XmlWriter.Create(Directory.GetCurrentDirectory() + @"\" + settingsName + ".xml", xmlSettings);
                 xmlWriter.WriteStartDocument();
+                xmlWriter.WriteStartElement("PuttyExport");
                 xmlWriter.WriteStartElement("Settings");
 
                 foreach(var value in rk.GetValueNames())
@@ -37,6 +38,18 @@ namespace SimplePuttyImporter.Core
                     else
                         xmlWriter.WriteValue(rk.GetValue(value).ToString());
   
+                    xmlWriter.WriteEndElement();
+                    xmlWriter.Flush();
+                }
+
+                xmlWriter.WriteEndElement();
+
+                if(withFingerprint)
+                {
+                   // xmlWriter.WriteElementString("Fingerprint", PuttyRegistry.GetFingerprint(fingerprintName));
+                    xmlWriter.WriteStartElement("Fingerprint");
+                    xmlWriter.WriteAttributeString("type", PuttyRegistry.GetFingerprintKind(fingerprintName));
+                    xmlWriter.WriteValue(PuttyRegistry.GetFingerprint(fingerprintName));
                     xmlWriter.WriteEndElement();
                     xmlWriter.Flush();
                 }

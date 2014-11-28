@@ -25,12 +25,57 @@ namespace SimplePuttyImporter.Core
             return settingsList;
         }
 
-        public static bool ExportSettings(String subkey)
+        public static List<String> GetFingerprints()
+        {
+            List<String> fingerprintsList = new List<string>();
+            string keyName = @"Software\SimonTatham\PuTTY\SshHostKeys";
+            RegistryKey rk = Registry.CurrentUser.OpenSubKey(keyName);
+
+            foreach (var value in rk.GetValueNames()) 
+            {
+                fingerprintsList.Add(value);
+            }
+
+            rk.Close();
+
+            return fingerprintsList;
+        }
+
+        public static string GetFingerprint(string value)
+        {
+            string keyName = @"Software\SimonTatham\PuTTY\SshHostKeys";
+            RegistryKey rk = Registry.CurrentUser.OpenSubKey(keyName);
+
+            string fingerprint = rk.GetValue(value).ToString();
+
+            rk.Close();
+
+            return fingerprint;
+        }
+
+        public static string GetFingerprintKind(string value)
+        {
+            string keyName = @"Software\SimonTatham\PuTTY\SshHostKeys";
+            RegistryKey rk = Registry.CurrentUser.OpenSubKey(keyName);
+
+            string fingerprintKind = rk.GetValueKind(value).ToString();
+
+            rk.Close();
+
+            return fingerprintKind;
+        }
+
+        public static bool ExportSettings(String subkey, bool withFingerprint, string fingerprint)
         {
             string keyName = @"Software\SimonTatham\PuTTY\Sessions\"+subkey;
             RegistryKey rk = Registry.CurrentUser.OpenSubKey(keyName);
+            bool exportResult = false;
 
-            bool exportResult = SettingsXML.CreateXML(rk, subkey);
+
+            if(withFingerprint)
+                exportResult = SettingsXML.CreateXML(rk, subkey, true, fingerprint);
+            else
+                exportResult = SettingsXML.CreateXML(rk, subkey, false, "");
 
             rk.Close();
 
